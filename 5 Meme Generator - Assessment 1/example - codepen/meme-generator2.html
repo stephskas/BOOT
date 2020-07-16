@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Meme Generator">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="meme-generator2.css">
+    <title>Meme Generator</title>
+  </head>
+  <body>
+    <!-- https://codepen.io/marboro92/pen/Qwyodv -->
+    <div class="container">
+      <h1>CREATE YOUR OWN MEME</h1>
+      <p>Upload an image, type in some lines and save</p>
+      <input type="file" id="file" />
+    </div>
+    <div id="image-container">
+      <canvas width="500" height="500"></canvas>
+      <div class="inputs">
+        <br />
+        <input id="topLineText" type="text" placeholder="TOP LINE"><br />
+        <br />
+        <input id="bottomLineText" type="text" placeholder="BOTTOM LINE"><br />
+        <button id="saveBtn">Save</button>
+      </div>
+    </div>
+    <script src="meme-generator2.js"></script>
+</body>
+</html>

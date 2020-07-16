@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8"><meta name="description" content="test">
+	<title>Timers Exercise</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		* {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: yellow;
+      width = 100vw;
+      }
+    #main {
+      text-align: center;
+      cursor: pointer;
+    }
+    h1 {
+      letter-spacing: -.1em;
+      font-size: 3em;
+      padding-left: 20px;
+    }
+    p {
+      margin-top: 0;
+      padding-top: 20px;
+      font-size: 25vw;
+      /* line-height: .5em; */
+    }
+    .random {
+      transition: color 1000ms;
+    }
+	</style>
+</head>
+
+
+<body>
+
+<h1>
+  <span class='random'>///</span>
+  <span class='random'>C</span>
+  <span class='random'>o</span>
+  <span class='random'>u</span>
+  <span class='random'>n</span>
+  <span class='random'>t</span>
+  <span class='random'>d</span>
+  <span class='random'>o</span>
+  <span class='random'>w</span>
+  <span class='random'>n</span>
+</h1>
+<div id="main">
+  <p id="display_Count"></p>
+</div>
+<script>
+
+/* COUNTDOWN
+Write a function called countdown that accepts a number as a parameter and every 1000 milliseconds decrements the value
+and console.logs it. Once the value is 0 it should log “DONE!” and stop.
+
+countDown(4);
+// 3
+// 2
+// 1
+// "DONE!"
+*/
+
+function countDown(time){
+  var count = document.getElementById("display_Count");
+  let timer = setInterval(function(){
+    time--;
+    if (time <= 0) { 
+      clearInterval(timer); 
+       count.innerText = 'DONE!';
+    } else { 
+       count.innerText = time;
+    }},1000) 
+}
+countDown(10);
+
+/* RANDOM COLOR GENERATOR */
+function randomRGB(){
+  // create 3 rgb colors from 0 to 255 in format of 'rgb(255,255,255)'
+  const r = Math.floor(Math.random() * 115 + 105);
+  const g = Math.floor(Math.random() * 25);
+  const b = Math.floor(Math.random() * 25);
+  return `rgb(${r},${g},${b})`
+}
+const letters = document.querySelectorAll('.random');
+setInterval(function(){ 
+  for (let letter of letters) {
+    letter.style.color = randomRGB();
+   }
+}, 1000);
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
