@@ -1,0 +1,32 @@
+ h1 {
+   font-family: Arial, Helvetica, sans-serif;
+   margin-left: 30px;
+ }
+ header {
+   height: 50px;
+   background-color: #000;
+ }
+ p {
+   margin-top: 15px;
+   font-size: 1.75em;
+   font-weight: 500;
+   color: #000;
+ }
+ form,
+ li, p {
+   line-height: 20pt;
+   margin: 10px 30px;
+ }
+ input[type=text] {
+   padding-left: 10px
+ }
+ button {
+   margin: 0 10px;
+   padding: 0 10px
+ }
+ ol{
+   margin-top: 20px;
+ }
+ .strikethrough {
+   text-decoration: line-through;
+ }
