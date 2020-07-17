@@ -44,19 +44,10 @@ function drawMeme(image, topText, bottomText) {
 }
 
 function saveFile(e) {
-  e.preventDefault()
-  var saveBtn = document.querySelector('#saveBtn')
-  saveBtn.addEventListener('click', function(e) {
-    var link = document.createElement('a');
-    link.innerHTML="DOWNLOAD REP";
-    link.href = canvastoDataURL();
-    link.download = "myRep.png";
-  }, false);
-    link.className = "myRepLink"
-  let displayLink =  document.querySelector("#download")
-  displayLink.appendChild(link);
+  e.preventDefault();
+  localStorage.setItem('yerRep.png', canvas.toDataURL('img/png'));
 }
-
+    
 function handleFileSelect(e) {
   //make canvas
   var canvasWidth = 500;
@@ -96,6 +87,7 @@ let inputTop = document.getElementById('topText');
 let inputBottom = document.getElementById('bottomText');
 inputTop.oninput = textChangeListener;
 inputBottom.oninput = textChangeListener;
-document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+document.querySelector("#fileInput").addEventListener('change', handleFileSelect);
 document.querySelector('#repBtn').addEventListener('click', textChangeListener);
+document.querySelector('#saveBtn').addEventListener('click', textChangeListener);
 })
