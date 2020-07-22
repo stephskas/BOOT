@@ -71,16 +71,25 @@ let clickedTask = e.target;
    console.log(localStorage.setItem("isCompleted", true))
   }
 } 
+
 // If remove button is clicked
 if (e.target.tagName === "BUTTON") {
-    e.target.parentElement.remove();
-    savedList.slice(indexOf(e.target.parentElement.innerText),0);
+  for (let i = 0; i < savedList.length; i++) {
+    let task = savedList[i]
+    if (task.task === e.target.parentElement.innerText.substr(0,task.task.length)) {
+      savedList.splice(i, 1)
+      localStorage.setItem('tasks',JSON.stringify(savedList));
+      break;
+    }
   }
+  e.target.parentElement.remove();
+}
 });
+
 
 // Add event listener to REMOVE ALL button
 removeAllBtn.addEventListener('click', function(e){
-  localStorage.clear();
+  localStorage.removeItem('tasks'); 
   while (list.firstChild) {
     list.removeChild(list.firstChild);
   }
