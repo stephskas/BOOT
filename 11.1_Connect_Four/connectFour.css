@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cabin', Arial, Helvetica, sans-serif;
+}
+h1 {
+ text-align: center;
+ margin: 20px 0 10px 0;
+ color: #323e49;
+ font-size: 3rem;
+}
+h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #323e49;
+}
+#game {
+  margin: 0 auto;
+  width: 650px;
+  height: 600px;
+  background-color: #e8e114;
+  padding: 1.5rem;
+}
+.slot {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 50%;
+  border:5px solid #e8e114;
+}
+.reset {
+  cursor: pointer;
+  width: 125px;
+  padding: 10px 15px;
+  letter-spacing: .05rem;
+}
+.btn {
+  text-align: center;
+  margin: 15px 0;
+}
