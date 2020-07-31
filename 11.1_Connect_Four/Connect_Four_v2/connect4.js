@@ -12,7 +12,7 @@ let player = 1;
 
 // STORE PLAYER PIECE PLACEMENT FOR WIN CHECK
 let playerPlacements = [];
- // STORE COUNT FOR TIE CHECK
+ // STORE COUNT FOR DRAW CHECK
 let selectedCount = 1;
 
 // RENDER GAME
@@ -71,7 +71,7 @@ function play(e) {
         document.getElementsByTagName('h3')[0].innerText = `PLAYER ${player} WINS!`;
         return;
       } 
-      // Check for tie
+      // Check for draw (total slots 42)
       if (selectedCount > 41) {
         document.getElementsByTagName('h3')[0].innerText = `DRAW!`;
         return;
