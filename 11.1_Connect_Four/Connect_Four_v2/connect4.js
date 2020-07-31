@@ -6,11 +6,14 @@ where they want to drop their piece.
 - A player wins by getting four-in-a row (horizontally, vertically or diagonally).
 - The game ends when a player wins or the board is full and the game is a draw.
 */
+"use strict"
 // Player 1 starts game
 let player = 1;
 
 // STORE PLAYER PIECE PLACEMENT FOR WIN CHECK
 let playerPlacements = [];
+ // STORE COUNT FOR TIE CHECK
+let selectedCount = 1;
 
 // RENDER GAME
 function createBoard() {
@@ -61,13 +64,18 @@ function play(e) {
   for(var i = 5; i >= 0; i--) { 
     let selected = tableRows[i].children[selectedCol];
     if (!selected.classList.contains('selected')) { 
+      // Add player number to player placement array
+      playerPlacements[i][selectedCol] = player;
+      // Check for win  
       if (checkForWin()) {
         document.getElementsByTagName('h3')[0].innerText = `PLAYER ${player} WINS!`;
         return;
+      } 
+      // Check for tie
+      if (selectedCount > 41) {
+        document.getElementsByTagName('h3')[0].innerText = `DRAW!`;
+        return;
       }
-      // Add player number to player placement array
-      playerPlacements[i][selectedCol] = player;
-
       if(player === 1) {
         selected.style.backgroundColor = 'red';
         document.getElementsByTagName('h3')[0].innerText = 'Player 1';   
@@ -78,10 +86,12 @@ function play(e) {
         player = 1;
       }
       selected.classList.add('selected');
+      selectedCount += 1;
       return;
     } 
   }
 }
+
 // CHECK FOR WIN
 function checkForWin() {
   function _win(slots) {
@@ -91,7 +101,8 @@ function checkForWin() {
       r < 6 && 
       c >= 0 && 
       c < 7 &&
-      playerPlacements[r][c] === player);
+      playerPlacements[r][c] === player
+    );
   } 
   // Iterate through all slots to test winning positions
   for(let r = 5; r >= 0; r--) { // 6-rows 
@@ -100,21 +111,17 @@ function checkForWin() {
       const vertical = [[r,c], [r + 1, c], [r + 2, c], [r + 3, c]];
       const diagDownLeft = [[r,c], [r + 1, c + 1], [r + 2, c + 2], [r + 3, c + 3]]; 
       const diagDownRight = [[r,c], [r + 1, c - 1], [r + 2, c - 2], [r + 3, c - 3]];         
-      // return winner (checking each win possibility only as needed)
+//       // return winner (checking each win possibility only as needed)
       if (_win(horizontal) || _win(vertical) || _win(diagDownLeft) || _win(diagDownRight)) {
-            console.log(playerPlacements[r][c]);
         return true;
       }
-    }
-  }  
+    }  
+  }
 }
 
 // RESET GAME 
 function reloadPage() {
   location.reload();
 }
-
-
-// CHECK FOR DRAW
 
 createBoard();
