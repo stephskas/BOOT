@@ -1,18 +1,27 @@
+/* CONNECT FOUR
+- Game takes two players who will alternate turns. 
+- Player 1 will be red and Player 2 will be blue.
+- On each turn, the player will click on the game board 
+where they want to drop their piece.
+- A player wins by getting four-in-a row (horizontally, vertically or diagonally).
+- The game ends when a player wins or the board is full and the game is a draw.
+*/
+
 // Declare variables for table tr and td nodelists, h3 with gameStatus class and reset button
 const tr = document.getElementsByTagName('tr');
 const td = document.getElementsByTagName('td');
 const gameStatus = document.querySelector('#gameStatus')
 const reset = document.querySelector('#reset');
 
-// Request player names
+// Request player 1 and player 2 names
 while(!player1){
   var player1 = prompt('Player One: Enter your name. You will be red.')
 }
 while (!player2) {
-  var player2 = prompt('Player Two: Enter your name. You will be black.')
+  var player2 = prompt('Player Two: Enter your name. You will be blue.')
 }
 
-// Start game with player 1 and set message to Player 1 name
+// Start game with player 1 and set game status to Player 1 name
 var currentPlayer = 1;
 gameStatus.textContent = `${player1}'s turn!`;
 
@@ -22,8 +31,8 @@ gameStatus.textContent = `${player1}'s turn!`;
   cell.style.backgroundColor = 'white';
 });
 
-// Player 1 color will be red, Player 2 color will be black 
-function changeColor(e){
+// Player 1 color will be red, Player 2 color will be blue 
+function changeColor(e) {
   let tdIdx = e.target.cellIndex;
   for (let i = 5; i > -1; i--){
     if(tr[i].children[tdIdx].style.backgroundColor === "white"){
@@ -31,27 +40,30 @@ function changeColor(e){
         tr[i].children[tdIdx].style.backgroundColor = 'red';
         if (horizontalCheck() || verticalCheck() || diagonalCheck1() || diagonalCheck2()){
           gameStatus.style.color = 'red';
-          gameStatus.textContent = (`${player1} wins!`);
-          return alert('player1 wins');
+          gameStatus.style.fontSize = "1.5rem"
+          gameStatus.textContent = (`${player1.toUpperCase()} WINS!`);
+          return;
         } else if(drawCheck()) {
-          gameStatus.textContent = ('Game is a draw');
-          return alert('draw!');;
+          gameStatus.textContent = ('GAME IS A DRAW');
+          return;
         } else {
           gameStatus.textContent = `${player2}'s turn!`;
           return currentPlayer = 2;
         }  
 
       } else { //if currentPlayer === 2
-        tr[i].children[tdIdx].style.backgroundColor = 'black';
+        tr[i].children[tdIdx].style.backgroundColor = '#323e49';
         gameStatus.textContent = `${player1}'s turn!`;
           if (horizontalCheck() || verticalCheck() || diagonalCheck1() || diagonalCheck2()) {
-            gameStatus.style.color = 'black';
-            gameStatus.textContent = (`${player2} wins!`);
-            return alert('player2 wins');
+            gameStatus.style.color = '#323e49';
+            gameStatus.style.fontSize = "1.5rem"
+            gameStatus.textContent = (`${player2.toUpperCase()} WINS!`);
+            return;
           } else if (drawCheck()) {
-            gameStatus.textContent = ('Game is a draw');
-            return alert('draw!');
+            gameStatus.textContent = ('GAME IS A DRAW');
+            return;
           } else {
+            gameStatus.style.color = '#323e49';
             gameStatus.textContent = `${player1}'s turn!`;
             return currentPlayer = 1;
           }  
@@ -60,7 +72,7 @@ function changeColor(e){
   }
 }
 
-// CHECK FOR WIN
+// Check for win
 function colorMatchCheck(one, two, three, four){
   return(one === two && one === three && one === four && one !== 'white');
 }
@@ -73,10 +85,10 @@ function horizontalCheck() {
         tr[row].children[col + 2].style.backgroundColor, 
         tr[row].children[col + 3].style.backgroundColor)){
           return true;
+        }
       }
-    }    
+    }      
   }
-}
 
 function verticalCheck() {
   for (let col = 0; col < 7; col++) {
@@ -118,17 +130,15 @@ function diagonalCheck2() {
 }
 
 function drawCheck() {
-  let fullSlot = [];
   for(let i = 0; i < td.length; i++) {
-    if (td[i].style.backgroundColor !== 'white') {
-      fullSlot.push(td[i]);
-    }
+    if (td[i].style.backgroundColor === 'white') {
+      return false;
+    } 
   }
-  if (fullSlot.length === td.length) {
-    return true;
-  }
+  return true;
 }
 
+// If Play Again button is clicked reset the board setting the td background to white and set h3 text to winner/current player's turn
 reset.addEventListener('click', () => {
   [...td].forEach(slot => {
     slot.style.backgroundColor = 'white';

@@ -67,8 +67,12 @@ let clickedTask = e.target;
   if(!clickedTask.isCompleted) {
    clickedTask.classList.add("strikethrough");
    clickedTask.isCompleted = true;
+   console.log(clickedTask)
   //  localStorage.setItem("isCompleted", true)
-   console.log(localStorage.setItem("isCompleted", true))
+      localStorage.setItem("isCompleted", true);
+  } else {
+    clickedTask.classList.remove("strikethrough");
+      localStorage.setItem("isCompleted", false);
   }
 } 
 
@@ -76,12 +80,14 @@ let clickedTask = e.target;
 if (e.target.tagName === "BUTTON") {
   for (let i = 0; i < savedList.length; i++) {
     let task = savedList[i]
-    if (task.task === e.target.parentElement.innerText.substr(0,task.task.length)) {
+
+
+    // if (task.task === e.target.parentElement.innerText.substr(0,task.task.length)) {
       savedList.splice(i, 1)
       localStorage.setItem('tasks',JSON.stringify(savedList));
       break;
     }
-  }
+  // }
   e.target.parentElement.remove();
 }
 });

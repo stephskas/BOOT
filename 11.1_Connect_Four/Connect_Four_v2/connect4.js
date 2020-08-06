@@ -9,7 +9,6 @@ where they want to drop their piece.
 "use strict"
 // Player 1 starts game
 let player = 1;
-
 // STORE PLAYER PIECE PLACEMENT FOR WIN CHECK
 let playerPlacements = [];
  // STORE COUNT FOR DRAW CHECK
