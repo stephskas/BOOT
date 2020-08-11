@@ -31,7 +31,7 @@ function createBoard() {
     const row = document.createElement('tr');
       row.setAttribute('id', `${r}`);
      // Create player placement array and match rows and cells 
-     playerPlacements.push(Array.from({ length: 7}));  
+      playerPlacements.push(Array.from({ length: 7}));  
     for (let c = 0; c < 7; c++) { // 7-columns of squares 
       let slot = document.createElement('td');
       slot.classList.add('slot');
@@ -70,7 +70,7 @@ function play(e) {
         document.getElementsByTagName('h3')[0].innerText = `PLAYER ${player} WINS!`;
         return;
       } 
-      // Check for draw (total slots 42)
+      // Check for draw (42 total slots filled)
       if (selectedCount > 41) {
         document.getElementsByTagName('h3')[0].innerText = `DRAW!`;
         return;

@@ -5,6 +5,9 @@ body {
   margin: 0;
   padding: 0;
 }
+#container {
+  margin: 0 auto;
+}
 #gameboard {
   background-color: #e8e114;
   border-radius: 5px;
@@ -19,6 +22,12 @@ body {
   background-color: white;
   border-radius: 50%;
   border: 3px solid #f2ec43;
+}
+form {
+  margin-top: 20px;
+}
+input {
+  margin: 10px 0;
 }
 /* RESET */
 button {
