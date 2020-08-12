@@ -13,22 +13,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   class Game {
     constructor(player1Color, player2Color, rowCount, colCount) {
-      this.players = [player1Color, player2Color]
+      this.player1Color = player1Color
+      this.player2Color = player2Color
       this.playerPlacements = []
-      // this.gameOver = false;
       this.rowCount = rowCount
       this.colCount = colCount
-      this.renderGame()
-      this.removeInputTable()
-      this.checkForWin()
-      this.resetGame()
+      this.renderGame() 
+      this.player = 1
+      this.selectedCount = 1
     }
-
     renderGame() {
       const container = document.getElementById("container")
       this.createHeaders()
       this.createBoard()
       this.createResetBtn()
+      this.removeInputTable()
     }
     createHeaders() {
       const header = document.createElement("h1")
@@ -36,10 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const gameStatus = document.createElement("h3")
       gameStatus.innerText = "Player 1" // Start with player 1
       container.append(header, gameStatus)
-    }
-    removeInputTable() {
-      document.querySelector("#inputTable").remove()
-      document.querySelector("#startBtn").remove()
     }
     createBoard() {
       const table = document.createElement("table")
@@ -67,65 +62,65 @@ document.addEventListener("DOMContentLoaded", () => {
       reset.innerText = "PLAY AGAIN"
       container.append(reset)
     }
+    removeInputTable() {
+      document.querySelector("#inputTable").remove()
+      document.querySelector("#startBtn").remove()
+    }
     handleSlotClick(e) {
-      console.log("e: " + e)
-      let player = 1
       let selectedRow = +e.target.parentElement.id
       let selectedCol = +e.target.id
-      // console.log(`Col: ${selectedCol}`)
-      // console.log(typeof selectedCol)
-      // console.log(`Row: ${selectedRow}`)
       let tableRows = document.getElementsByTagName("tr")
       let tableCells = document.getElementsByTagName("td")
-      // console.log(tableCells[selectedCol])
-      // console.log(player)
       // Check selected column for empty space starting from bottom row
-      for (var i = 5; i >= 0; i--) {
-        let selected = tableRows[i].children[selectedCol]
+      for (var i = this.rowCount-1; i >= 0; i--) {
+        let selected = tableRows[i].children[selectedCol];
         if (!selected.classList.contains("selected")) {
           // Add player number to player placement array
-          console.log(this.playerPlacements[i])
-          this.playerPlacements[i][selectedCol] = player
+          // console.log(this.playerPlacements[i][selectedCol])
+          // console.log(this.player1Color)
+          this.playerPlacements[i][selectedCol] = this.player;
           // Check for win
-          if (checkForWin()) {
-            setTimeout(handleWin, 500); // 500ms = 1/2sec
+          if (this.checkForWin()) {
+            // setTimeout(handleWin, 500); // 500ms = 1/2sec
+            return this.handleWin();
           }
           // Check for draw (42 total slots filled)
-          if (document.querySelectorAll("td.selected").length === 42) {
+          if (document.querySelectorAll("td.selected").length === (this.rowCount * this.colCount)) {
             document.getElementsByTagName("h3")[0].innerText = `DRAW!`
             // return null;
           }
-          if (player === 1) {
-            this.selected.style.backgroundColor = player1Color
+          console.log(this.player)
+          if (this.player === 1) {
+            selected.style.backgroundColor = this.player1Color;
             document.getElementsByTagName("h3")[0].innerText = "Player 1"
-            player = 2
-          } else {
+            this.player = 2
+          } else { 
             document.getElementsByTagName("h3")[0].innerText = "Player 2"
-            this.selected.style.backgroundColor = player2Color
-            player = 1
+            selected.style.backgroundColor = this.player2Color;
+            this.player = 1
           }
-          selected.classList.add("selected")
-          // return null;
+          selected.classList.add("selected");
+          selectedCount += 1;
+          return;
         }
       }
     }
     // CHECK FOR WIN
     checkForWin() {
       // Check player placement array for four in a row of the same player numbers and within range
-      let win = (slots) =>
+      let _win = (slots) =>
         slots.every(
           ([r, c]) =>
             r >= 0 &&
-            r < 6 &&
+            r < this.rowCount &&
             c >= 0 &&
-            c < 7 &&
+            c < this.colCount &&
             this.playerPlacements[r][c] === this.player
-        )
-
+        );
       // Iterate through all slots to test winning positions
-      for (let r = 5; r >= 0; r--) {
+      for (let r = this.rowCount; r >= 0; r--) {
         // 6-rows
-        for (let c = 0; c < 7; c++) {
+        for (let c = 0; c < this.colCount; c++) {
           // 7-columns
           const horizontal = [
             [r, c],
@@ -166,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handleWin() {
       document.getElementsByTagName("h3")[0].innerText = `PLAYER ${this.player} WINS!`
-      slot.removeEventListener("click", this.resetGame)
+      this.slot.removeEventListener("click", this.resetGame)
       // return null;
     }
 
