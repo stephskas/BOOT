@@ -24,10 +24,19 @@ body {
   border: 3px solid #f2ec43;
 }
 form {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 input {
-  margin: 10px 0;
+  margin: 0 0 10px 0;
+  width: 100px;
+  text-align: center;
+}
+#inputTable {
+  display: flex;
+  justify-content: center;
+}
+#inputTable td {
+  text-align: center;
 }
 /* RESET */
 button {

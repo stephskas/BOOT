@@ -12,12 +12,28 @@
   <div id="container">
     <form>
     <!-- <label for="playerCount">Number of players:<input id="playerCount" type="number" min="1" max="4"></label> -->
-    <label for="player1Color">Player 1 color <input id="player1Color" type="color" value="#e55050" min="6" max="10"></label>
-    <label for="player2Color">Player 2 color <input id="player2Color" type="color" value="#434a66" min="6" max="10"></label><br>
-    <label for="rowCount"># Rows <input id="rowCount" type="number" value ="6" min="6" max="10"></label>
-    <label for="colCount"># Columns <input id="colCount" type="number" value="7" min="7" max="11"></label>
-    <div><button id="startBtn">START</button></div>
+    <table id="inputTable">
+      <tr>
+        <td><label for="player1Color">Player 1</td>
+        <td><label for="player2Color">Player 2</label></td>
+      </tr>
+      <tr>
+        <td><input id="player1Color" type="color" value="#e55050" min="6"
+              max="10"></label></td>
+        <td><input id="player2Color" type="color" value="#434a66" min="6"  max="10"></label></td>
+      </tr>
+      <tr>
+        <td><label for="rowCount"># Rows</label></td>
+        <td><label for="colCount"># Columns</label></td>
+        </tr>
+      </tr>
+      <tr>
+        <td><input id="rowCount" type="number" value ="6" min="6" max="10"></label></td>
+         <td><input id="colCount" type="number" value="7" min="7" max="11"></label></td>
+       </tr>
     </form>
+    </table>
+    <div><button id="startBtn">START</button></div>
     <table id="board"></table>
   </div>
 
