@@ -80,9 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // console.log(this.player1Color)
           this.playerPlacements[i][selectedCol] = this.player;
           // Check for win
-          if (this.checkForWin()) {
-            // setTimeout(handleWin, 500); // 500ms = 1/2sec
-            return this.handleWin();
+          if (this.checkForWin(this.player)) {
+            setTimeout(this.handleWin, 500); // 500ms = 1/2sec
+            // return this.handleWin();
           }
           // Check for draw (42 total slots filled)
           if (document.querySelectorAll("td.selected").length === (this.rowCount * this.colCount)) {
