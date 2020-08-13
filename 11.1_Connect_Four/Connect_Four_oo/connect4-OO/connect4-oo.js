@@ -10,17 +10,18 @@ where they want to drop their piece.	where they want to drop their piece.
 */
 
 document.addEventListener("DOMContentLoaded", () => {
-
+    
   class Game {
     constructor(player1Color, player2Color, rowCount, colCount) {
       this.player1Color = player1Color
       this.player2Color = player2Color
+      this.player = 1
+      this.selectedCount = 1
       this.playerPlacements = []
       this.rowCount = rowCount
       this.colCount = colCount
+      this.boundHandleSlotClick = this.handleSlotClick.bind(this);
       this.renderGame() 
-      this.player = 1
-      this.selectedCount = 1
       this.boundHandleWin = this.handleWin.bind(this);
     }
     renderGame() {
@@ -48,8 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
           let slot = document.createElement("td")
           slot.classList.add("slot")
           slot.setAttribute("id", `${c}`)
-          this.handleSlotClick = this.handleSlotClick.bind(this);
-          slot.addEventListener("click", this.handleSlotClick)
+          slot.addEventListener("click", this.boundHandleSlotClick)
           row.append(slot)
         }
         table.appendChild(row)
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (this.checkForWin(this.player)) {
             let winningColor = (this.player === 1) ? this.player1Color : this.player2Color; 
             selected.style.backgroundColor = winningColor;
-            return setTimeout(this.boundHandleWin, 100); // 500ms = 1/2sec
+            return setTimeout(this.boundHandleWin, 100); 
           }
           // Check for draw (42 total slots filled)
           if (document.querySelectorAll("td.selected").length === (this.rowCount * this.colCount)) {
