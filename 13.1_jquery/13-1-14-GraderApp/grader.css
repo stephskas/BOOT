@@ -1,0 +1,126 @@
+/*  GLOBAL */
+:root {
+  --main-bg-color: #f2f2f2;
+  --white: #fff;
+  --offwhite: #d6d6d6;
+  --grey: #555;
+  --yellow:#ffcc36;
+  --red: #ce4618;
+}
+body {
+  background-color: var(--main-bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family:"Open Sans", Helvetica, Arial, sans-serif;
+  color:var(--grey);
+  max-width: 680px;
+  margin:0 auto;
+  padding:0 20px;
+}
+h3 {
+  font-size: 3em;
+  margin: 5vh 0 20px 0;
+}
+/*  FORM */
+form {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  border: none;
+}
+input {
+  background-color: var(--white);
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+  font-size: 1em;
+  color:var(--grey);
+  letter-spacing: .05em;;
+  height: 2em;
+  width: 400px;
+  padding: 10px;
+}
+/*  STARS */
+ul.stars {
+  display: inline-block;
+  list-style-type: none;
+  margin-bottom: 15px;
+  min-width: 200px;
+}
+ul.stars > li.star {
+  display: inline-block;
+  text-align: center;
+  font-size: 1.25em;
+  letter-spacing:.35em;
+  cursor: pointer;
+}
+ul.stars > li.star.hover, ul.stars > li.star.selected {
+  color: var(--yellow);
+  transition: color .25s ease-in-out;
+}
+/*  BUTTONS */
+#clearBtn {
+  padding: 0;
+  width: 2em;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5em;
+  color: var(--white);
+  background-color: var(--grey);
+  margin-left: 5px;
+  cursor: pointer;
+}
+#clearBtn:hover {
+  background-color: #7f7f7f;
+}
+#submitBtn {
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 20px auto;
+  cursor: pointer;
+}
+#submitBtn:hover, #submitBtn:active{
+  background-color: var(--offwhite);
+  border: 1px solid var(--grey);
+}
+#removeBtn {
+  color: var(--grey);
+  background-color: var(--main-bg-color);
+  cursor: pointer;
+}
+#removeBtn: hover {
+  background-color: var(--main-bg-color);
+  border: none;
+}
+/*  LIST */
+#userList {
+    display: inline-block;
+}
+#userList ul.stars {
+  margin-left: -20px
+}
+#userList li ul li.star {
+  font-size: .75em;
+  text-align: left;
+  padding-left: 0;
+}
+ol {
+  /* text-align: center; */
+  width: 550px;
+  padding: 0;
+  margin-top: 0;
+  text-align: left;
+  line-height: 1.25em;
+}
+li {
+  opacity: .9;
+}
+.fadeIn {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+/* ERRORS */
+#errorMsg {
+  color: var(--red);
+}
