@@ -65,23 +65,27 @@ jQuery(function ($) {
   $("#submitBtn").on("click", function(e){
     e.preventDefault();
     let $title = $("#input-title").val();
-      if ($title && $("li.selected")){
+    let rating = $("li.selected").length; 
+      if ($title && (rating > 0 === true)){
         $("#errorMsg").remove()
         let listItem = $("<li>", {text: $title});
+        listItem.addClass("listItem");
+        // for(let i = rating; i <=5)
         listItem.append($(".star-container").html());
-        console.log(listItem);
+        listItem.append($("<button>", {text: "X"}).addClass('removeBtn'));
         $("#userList").append(listItem);
         $("#input-title").val("");
         $("li.selected").removeClass("selected");
+        $(".removeBtn").click(function(e) {
+          $(this).parent().remove()
+        })
       } else {
         $("#errorMsg").append($("<p>", {text: "Please enter a title and rating"}));
       }     
   });
-  // click on clear button should clear title   input field and rating 
+  // click on clear button should clear title  input field and rating 
   $("#clearBtn").on("click", function(e){
-      e.preventDefault();
     $("#input-title").val("");
     $("li.selected").removeClass("selected");
   });
-
 });

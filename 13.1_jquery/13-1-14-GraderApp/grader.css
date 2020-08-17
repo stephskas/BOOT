@@ -14,7 +14,7 @@ body {
   align-items: center;
   font-family:"Open Sans", Helvetica, Arial, sans-serif;
   color:var(--grey);
-  max-width: 680px;
+  max-width: 550px;
   margin:0 auto;
   padding:0 20px;
 }
@@ -26,7 +26,7 @@ h3 {
 form {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 20px;
   border: none;
 }
 input {
@@ -44,8 +44,9 @@ input {
 ul.stars {
   display: inline-block;
   list-style-type: none;
-  margin-bottom: 15px;
-  min-width: 200px;
+  text-align: center;
+  margin: 0 0 15px 0;
+  padding-left: 0;
 }
 ul.stars > li.star {
   display: inline-block;
@@ -58,6 +59,9 @@ ul.stars > li.star.hover, ul.stars > li.star.selected {
   color: var(--yellow);
   transition: color .25s ease-in-out;
 }
+#input-title {
+  margin-right: 5px;
+}
 /*  BUTTONS */
 #clearBtn {
   padding: 0;
@@ -67,7 +71,7 @@ ul.stars > li.star.hover, ul.stars > li.star.selected {
   font-size: 1.5em;
   color: var(--white);
   background-color: var(--grey);
-  margin-left: 5px;
+  margin: 0 20px 0 5px;
   cursor: pointer;
 }
 #clearBtn:hover {
@@ -84,21 +88,29 @@ ul.stars > li.star.hover, ul.stars > li.star.selected {
   background-color: var(--offwhite);
   border: 1px solid var(--grey);
 }
-#removeBtn {
-  color: var(--grey);
-  background-color: var(--main-bg-color);
+.removeBtn {
+  padding: 2px 2px 0 2px;
+  width: 2em;
+
+  border: none;
+  border-radius: 5px;
+  font-size: .75em;
+  color: var(--white);
+  background-color: var(--grey);
+  margin: 0 20px 0 15px;
   cursor: pointer;
 }
-#removeBtn: hover {
-  background-color: var(--main-bg-color);
-  border: none;
+.removeBtn:hover {
+  background-color: #7f7f7f;
 }
 /*  LIST */
 #userList {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
 }
 #userList ul.stars {
-  margin-left: -20px
+  margin-left: 15px
 }
 #userList li ul li.star {
   font-size: .75em;
