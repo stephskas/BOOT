@@ -3,7 +3,7 @@
   --main-bg-color: #f2f2f2;
   --white: #fff;
   --offwhite: #d6d6d6;
-  --grey: #555;
+  --grey: rgb(62, 62, 62);
   --yellow:#ffcc36;
   --red: #ce4618;
 }
@@ -12,14 +12,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family:"Open Sans", Helvetica, Arial, sans-serif;
+  font-family:'Alata', 'Open Sans', Helvetica, Arial, sans-serif;
   color:var(--grey);
   max-width: 550px;
   margin:0 auto;
   padding:0 20px;
 }
 h3 {
-  font-size: 3em;
+  font-size: 3.5em;
   margin: 5vh 0 20px 0;
 }
 /*  FORM */
@@ -51,7 +51,7 @@ ul.stars {
 ul.stars > li.star {
   display: inline-block;
   text-align: center;
-  font-size: 1.25em;
+  font-size: 2em;
   letter-spacing:.35em;
   cursor: pointer;
 }

@@ -56,7 +56,7 @@ jQuery(function ($) {
     let $title = $("#input-title").val()
     catData.title = $title
     catData.id = $catId
-    console.log(catData)
+    // console.log(catData)
   })
     // On submit should add text input to a list displayed to user
     // On submit should append stars to list
@@ -70,7 +70,8 @@ jQuery(function ($) {
         $("#errorMsg").remove()
         let listItem = $("<li>", {text: $title});
         listItem.addClass("listItem");
-        // for(let i = rating; i <=5)
+        // for(let i = 0; i <= rating; i++) {}
+        console.log(rating)
         listItem.append($(".star-container").html());
         listItem.append($("<button>", {text: "X"}).addClass('removeBtn'));
         $("#userList").append(listItem);
