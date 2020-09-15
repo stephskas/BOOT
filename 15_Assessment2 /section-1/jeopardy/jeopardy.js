@@ -1,93 +1,150 @@
 
 // REQUIREMENTS:
 // V1
-// [ ] On page load, add event handler for clicking clues
-// [ ] On click of start should start and set up game 
-// [ ] Should add restart button
-// [ ] Should get random category Ids
-// [ ] Should get data for each category
-// [ ] Should create HTML table
+// [X] On page load, set up game and add event handler for clicking clues
+// [X] Should add Play Again button
+// [X] Should create HTML table
+
+  // V2
+  // [X] Should get categories from API
+  // [X] Should return array of NUM_CATEGORIES random category Ids using lodash
 
 "use strict"
 const BASE_API_URL = "https://jservice.io/api/";
 const NUM_CATEGORIES = 6;
-const NUM_QUESTIONS = 30;
-const NUM_ROWS = NUM_QUESTIONS/NUM_CATEGORIES; 
-const NUM_CLUES_PER_CAT = 2;
-// Player 1 starts game
-let player = 1;
-// STORE PLAYER PIECE PLACEMENT FOR WIN CHECK
-let playerPlacements = [];
-// STORE COUNT FOR DRAW CHECK
-let selectedCount = 1
+const NUM_CLUES_PER_CATEGORY = 5;
+const NUM_QUESTIONS = NUM_CATEGORIES * NUM_CLUES_PER_CATEGORY;
 
-async function setUp() {
-  const categories = await axios.get(`${BASE_API_URL}categories?count=100`)
-  let randomCategories = _.sampleSize(categories.data, 6)
-  let randomCategoryIds = [];
-  if(randomCategories.length === 6) {
-    randomCategories.forEach(category => randomCategoryIds.push(category.id))
-    console.log(randomCategoryIds)
+// STORE BOARD CATEGORIES
+let boardCategories = [];
+// STORE CLUE NUMBERS
+let displayedClues = [];
+// STORE PLAYER SCORES
+let p1 = 0;
+let p2 = 0;
+
+async function getCategoryIds() {
+  // Get random categories
+  let categories = await axios.get(`${BASE_API_URL}categories?count=100`) //get max provided categories: 100
+  let randomCategories = _.sampleSize(categories.data, NUM_CATEGORIES) // randomize categories and reduce sample size
+   console.log(randomCategories)
+
+  randomCategories.map((category) =>
+    boardCategories.push({
+      catId: category.id,
+      catTitle: category.title,
+    })
+  )
+  // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+  // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}}
+  // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
+}
+
+function getSelectedCategoryId(e) {
+  let cell = e.target //class is the same (index) for each td in the column <td class="1">?</td>
+  let $clueIndex = $(cell).attr("class") // 1
+  let $selectedCategoryId = boardCategories[$clueIndex].catId // catId for column
+  return $selectedCategoryId
+}
+
+async function getClues(e, $selectedCategoryId) {
+  let response= await axios.get(
+    `${BASE_API_URL}category?id=${$selectedCategoryId}`
+  )
+  let cluesForSelectedCategory = response.data.clues;
+  let clues = cluesForSelectedCategory.map((clue) => ({
+    question: clue.question,
+    answer: clue.answer,
+    id: clue.id,
+    showing: null,
+  }))
+  for(let i = 0; i < clues.length; i++){
+    if(!clues[i].question){
+      getClues(e, $selectedCategoryId, $selected); 
+    }
   }
+  renderClue(e, clues) 
+}
 
+async function renderBoard() {
   // RENDER GAME
-  // Create headers
   const $header = $(`<h1>JEOPARDY</h1>`)
-  const $gameStatus = $(`<h2>0</h2>`)
+  const $gameStatus = $(
+    `<h2><span class="p1">${p1}</span> / <span class="p2">${p2}</span></h2>`
+  )
   const $table = $(`<table></table>`)
-  const $reset = $(`<button>PLAY AGAIN</button>`)
+  const $reset = $(`<button id="restart">PLAY AGAIN</button>`)
   $("body").append($header, $gameStatus, $table, $reset)
   $table.attr("id", "gameboard")
-  $table.on("click", getCategoryId)
-
-  // Create rows below top row
-  $table.append(`<tbody class="clues"></tbody>`)
-  for (let r = 1; r <= NUM_ROWS; r++) {
-    $("tbody").append(`<tr class="row ${r}"></tr>`)
-  }
-  // Create table cells for clues
-  for (let x = 1; x <= NUM_CATEGORIES; x++) {
-    $("tr.row").append(`<td class="${x-1}">?</td>`)
-  }
-  $table.append(`<thead class="head"><tr class="categories"></tr></thead>`)
   // Create top row for categories
-  for (let c = 0; c <= NUM_CATEGORIES; c++) {
-    $("tr.categories").append(`<th class="category ${c}">${randomCategories[c].title}</th>`)
+  $table.append(`<thead class="head"><tr class="categories"></tr></thead>`)
+  for (let c = 0; c < NUM_CATEGORIES; c++) {
+    $("tr.categories").append(
+      `<th class="category ${c}">${boardCategories[c].catTitle}</th>`
+    )
   }
+  // Set number of rows and create rows beneath top row
+  $table.append(`<tbody class="clues"></tbody>`)
+  for (let r = 1; r <= NUM_CLUES_PER_CATEGORY; r++) {
+    $("tbody").append(`<tr class="${r - 1}"></tr>`)
+  // Set number of columns and create table cells for clues
+  } 
+  for (let c = 1; c <= NUM_CATEGORIES; c++) {
+      $("tbody tr").append(`<td class="${c - 1}">?</td>`)
+    }
   // Create reset button
   const reset = document.createElement("button")
   reset.innerText = "PLAY AGAIN"
+};
 
-
+async function renderClue(e, clues) {
+  // RENDER CLUES
+ let $selected = e.target;
+   let row = $($selected).parent()[0].className;
+  if ($($selected).hasClass("answer")) {
+    return;
+  } else if($($selected).not("question")) {
+    $($selected).text(clues[row].question);
+    $($selected).addClass("question");
+    return;
+  }  else if ($($selected).hasClass("question")) {
+    alert("yes")
+    $($selected).text(clues[row].answer);
+    $($selected).addClass("answer");
+    return;
+  }  
 }
+$(async function(){
+  renderBoard(await getCategoryIds())
+  // Event handlers
+  $("td").on("click", function(e) {
+    let $selectedCategoryId = getSelectedCategoryId(e);
+    renderClue(e, getClues)
+    getClues(e, $selectedCategoryId)
+    
+   })
+});
+  //Increment scores
+$("h2").on("click", function (e) {
+  if(e.target.className === "p1") {
+    p1++;
+    $(".p1").text(p1)
+  } else {
+    p2++;
+    $(".p2").text(p2)
+  }  
+});
+ // Play Again - Reload page
+$("#restart").on("click", function () {
+    location.reload() 
+});
 
-// function play(){
-//   console.log('player');
-// }
 
-// Event handlers
-$(".clues").click(function(e){
-  getCategoryId(e)
-})
-
-
-function getCategoryId(e){
-  let cell = e.target
-  let $clueCategoryClass = $(cell).attr('class');
-  let $clueCategoryId = randomCategoryIds[$clueCategoryClass]
-  console.log($clueCategory)
-}
-
-
-  // V2
-  // [ ] Should get NUM_CATEGORIES random category from API.
-  // [ ] Should return array of category ids
-  // let categories = [];
-  // function getCategoryIds() {}
 
   // V3
-  // [ ] Should return object with data about a category:
-  // [ ]  Should return { title: "Math", clues: clue-array }
+  // [X] Should return object with data about a category:
+  // [X] Should get question and answer clue data for each category
+  // [X]  Should return { title: "Math", clues: clue-array }
   //    Where clue-array is:
   //     [
   //        {question: "Hamlet Author", answer: "Shakespeare", showing: null},
@@ -97,9 +154,9 @@ function getCategoryId(e){
   // function getCategory(catId) {}
 
   // V4
-  // [ ] Should fill the HTML table#jeopardy with the categories & cells for questions.
-  // [ ] The <thead> should be filled w/a <tr>, and a <td> for each category
-  // [ ] The <tbody> should be filled w/NUM_QUESTIONS_PER_CAT <tr>s,
+  // [X] Should fill the HTML table#jeopardy with the categories & cells for questions.
+  // [X] The <thead> should be filled w/a <tr>, and a <td> for each category
+  // [X] The <tbody> should be filled w/NUM_QUESTIONS_PER_CAT <tr>s,
   //     each with a question for each category in a <td>
   //     (initally, just show a "?" where the question/answer would go.)
   // async function fillTable() { }
@@ -130,4 +187,3 @@ function getCategoryId(e){
   // [ ] Should use Lodash to randomly select 6 categories
   
 
-setUp();
