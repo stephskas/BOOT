@@ -58,6 +58,14 @@ jQuery(function ($) {
     // On submit should append stars to list
     // On submit should display list to user
     // On submit should clear title input field 
+    // On enter should act as on submit
+
+  $(document).on("keypress", function (e) {
+    if (e.which == 13) {
+       $("#submitBtn").click();
+    }
+  });
+  
   $("#submitBtn").on("click", function(e){
     e.preventDefault();
     let $title = $("#input-title").val();
