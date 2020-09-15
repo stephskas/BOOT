@@ -1,9 +1,9 @@
 /*  GLOBAL */
 :root {
-  --main-bg-color: #f2f2f2;
+  --main-bg-color: #fff;
   --white: #fff;
-  --offwhite: #d6d6d6;
-  --grey: rgb(62, 62, 62);
+  --offwhite: #f2f2f2;
+  --grey: rgb(57, 51, 51);
   --yellow:#ffcc36;
   --red: #ce4618;
 }
@@ -108,13 +108,14 @@ ul.stars > li.star.hover, ul.stars > li.star.selected {
     display: flex;
     flex-direction: column;
     width: 500px;
+    text-align: left;
+    line-height: 2em;;
 }
 #userList ul.stars {
   margin-left: 15px
 }
 #userList li ul li.star {
   font-size: .75em;
-  text-align: left;
   padding-left: 0;
 }
 ol {
