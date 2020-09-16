@@ -18,7 +18,7 @@ const NUM_QUESTIONS = NUM_CATEGORIES * NUM_CLUES_PER_CATEGORY;
 // STORE BOARD CATEGORIES
 let boardCategories = [];
 // STORE CLUE NUMBERS
-let displayedClues = [];
+let clues = [];
 // STORE PLAYER SCORES
 let p1 = 0;
 let p2 = 0;
@@ -33,6 +33,9 @@ async function getCategoryIds() {
     boardCategories.push({
       catId: category.id,
       catTitle: category.title,
+      question: "",
+      answer: "",
+      id: 0
     })
   )
   // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
@@ -44,6 +47,7 @@ function getSelectedCategoryId(e) {
   let cell = e.target //class is the same (index) for each td in the column <td class="1">?</td>
   let $clueIndex = $(cell).attr("class") // 1
   let $selectedCategoryId = boardCategories[$clueIndex].catId // catId for column
+  console.log($selectedCategoryId)
   return $selectedCategoryId
 }
 
@@ -56,14 +60,16 @@ async function getClues(e, $selectedCategoryId) {
     question: clue.question,
     answer: clue.answer,
     id: clue.id,
-    showing: null,
+    showing: null
   }))
+  
+ console.log(clues)
   for(let i = 0; i < clues.length; i++){
     if(!clues[i].question){
-      getClues(e, $selectedCategoryId, $selected); 
+      getClues(e, clues); 
     }
-  }
-  renderClue(e, clues) 
+      renderQuestion(e, clues)
+    }
 }
 
 async function renderBoard() {
@@ -97,49 +103,68 @@ async function renderBoard() {
   reset.innerText = "PLAY AGAIN"
 };
 
-async function renderClue(e, clues) {
-  // RENDER CLUES
+async function renderQuestion(e, clues) {
+  // RENDER QUESTION
  let $selected = e.target;
+//  console.log($selected)
    let row = $($selected).parent()[0].className;
-  if ($($selected).hasClass("answer")) {
-    return;
-  } else if($($selected).not("question")) {
+ if($($selected).not("question")) {
     $($selected).text(clues[row].question);
-    $($selected).addClass("question");
-    return;
-  }  else if ($($selected).hasClass("question")) {
-    alert("yes")
-    $($selected).text(clues[row].answer);
-    $($selected).addClass("answer");
-    return;
-  }  
+    $($selected).addClass("question");  
+    return clues;
+  }
 }
-$(async function(){
+async function renderAnswer(e, clues) {
+  // RENDER ANSWER
+   let $selected = e.target;
+   let row = $($selected).parent()[0].className;
+   console.log(row)
+  if ($($selected).hasClass("question")){
+    $($selected).text(clues[row].answer)
+    $($selected).addClass("answer");  
+  } 
+}
+
+
+
+   
+
+$(async function () {
   renderBoard(await getCategoryIds())
   // Event handlers
-  $("td").on("click", function(e) {
-    let $selectedCategoryId = getSelectedCategoryId(e);
-    renderClue(e, getClues)
-    getClues(e, $selectedCategoryId)
-    
-   })
-});
+  $("td").on("click", function (e) {
+    let $selectedCategoryId = getSelectedCategoryId(e)
+    console.log(this)
+    if ($(this).answer) {
+      return
+    }
+    if (!$(this).question) {
+      console.log("not working")
+      renderAnswer(getClues(e, $selectedCategoryId))
+      this.addClass('question')
+      return
+    }
+    if ($(this).question) {
+      console.log("working")
+      renderQuestion(getClues(e, $selectedCategoryId))
+      return
+    }
+  })
   //Increment scores
-$("h2").on("click", function (e) {
-  if(e.target.className === "p1") {
-    p1++;
-    $(".p1").text(p1)
-  } else {
-    p2++;
-    $(".p2").text(p2)
-  }  
-});
- // Play Again - Reload page
-$("#restart").on("click", function () {
-    location.reload() 
-});
-
-
+  $("h2").on("click", function (e) {
+    if (e.target.className === "p1") {
+      p1++
+      $(".p1").text(p1)
+    } else {
+      p2++
+      $(".p2").text(p2)
+    }
+  })
+  // Play Again - Reload page
+  $("#restart").on("click", function () {
+    location.reload()
+  })
+})
 
   // V3
   // [X] Should return object with data about a category:
@@ -185,5 +210,4 @@ $("#restart").on("click", function () {
 
   // V9
   // [ ] Should use Lodash to randomly select 6 categories
-  
 
