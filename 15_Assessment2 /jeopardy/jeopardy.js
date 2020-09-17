@@ -50,11 +50,11 @@ async function getClues(e, $selectedCategoryId) {
     `${BASE_API_URL}category?id=${$selectedCategoryId}`
   ) // get clues for selected category id
   let cluesForSelectedCategory = response.data.clues
-  let randomClues = _.sampleSize(
-    cluesForSelectedCategory,
-    NUM_CLUES_PER_CATEGORY
-  ) // randomize clues and reduce sample size
-  clues = randomClues.map((clue) => ({
+  // let randomClues = _.sampleSize(
+  //   cluesForSelectedCategory,
+  //   NUM_CLUES_PER_CATEGORY
+  // ) // randomize clues and reduce sample size
+  clues = cluesForSelectedCategory.map((clue) => ({
     question: clue.question,
     answer: clue.answer,
     showing: null,
