@@ -138,7 +138,7 @@ $(async function () {
 function handleClick(e) {
   // Event handlers
   $("td").on("click", function (e) {
-    CLICK.play();
+    CLICK.play(); // play sound on click
     let $selectedCategoryId = getSelectedCategoryId(e);
     let $selected = e.target;
     if ($(this).hasClass("answer")) {
