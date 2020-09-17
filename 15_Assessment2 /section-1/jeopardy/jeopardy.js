@@ -95,7 +95,7 @@ async function renderBoard() {
   reset.innerText = "PLAY AGAIN"
 };
 
-async function renderQuestion(e, clues) {
+async function renderQuestion(e) {
   // RENDER QUESTION
  let $selected = e.target;
  let row = $($selected).parent()[0].className[0];
@@ -105,13 +105,14 @@ async function renderQuestion(e, clues) {
     return clues;
   }
 }
-async function renderAnswer($selected) {
+async function renderAnswer(e) {
   // RENDER ANSWER
-  let row = $($selected).parent()[0].className[0];
-   let answer = clues[row].answer
-   $($selected).text(answer);
-   $($selected).removeClass("question");
-   $($selected).addClass("answer");  
+  let $selected = e.target
+  let row = $($selected).parent()[0].className[0]
+  let answer = clues[row].answer
+  $($selected).text(answer)
+  $($selected).removeClass("question")
+  $($selected).addClass("answer")
 } 
 
 $(async function () {
@@ -132,7 +133,7 @@ function handleClick(e) {
       return
     }
     if ($($selected).hasClass("question")) {
-      renderAnswer($selected)
+      renderAnswer(e)
       return
     }
   })
