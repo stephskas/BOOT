@@ -68,8 +68,12 @@ button {
   border-radius: 8px;
   transition: all ease-in-out .15s;
 }
-button:hover, .complete {
+button:hover {
   filter: blur(0px);
+  cursor: pointer;
+}
+td:hover {
+  cursor: pointer;
 }
 .question {
   color: #f1f1f1;

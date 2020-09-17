@@ -27,17 +27,11 @@ async function getCategoryIds() {
   // Get random categories
   let categories = await axios.get(`${BASE_API_URL}categories?count=100`) //get max provided categories: 100
   let randomCategories = _.sampleSize(categories.data, NUM_CATEGORIES) // randomize categories and reduce sample size
-   console.log(randomCategories)
-
-  randomCategories.map((category) =>
-    boardCategories.push({
+  // console.log(randomCategories)
+  boardCategories = randomCategories.map(category => ({
       catId: category.id,
-      catTitle: category.title,
-      question: "",
-      answer: "",
-      id: 0
-    })
-  )
+      catTitle: category.title
+    }));
   // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
   // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}}
   // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
@@ -47,7 +41,7 @@ function getSelectedCategoryId(e) {
   let cell = e.target //class is the same (index) for each td in the column <td class="1">?</td>
   let $clueIndex = $(cell).attr("class") // 1
   let $selectedCategoryId = boardCategories[$clueIndex].catId // catId for column
-  console.log($selectedCategoryId)
+  // console.log($selectedCategoryId)
   return $selectedCategoryId
 }
 
@@ -56,7 +50,7 @@ async function getClues(e, $selectedCategoryId) {
     `${BASE_API_URL}category?id=${$selectedCategoryId}`
   )
   let cluesForSelectedCategory = response.data.clues;
-  let clues = cluesForSelectedCategory.map((clue) => ({
+  clues = cluesForSelectedCategory.map((clue) => ({
     question: clue.question,
     answer: clue.answer,
     id: clue.id,
@@ -90,7 +84,7 @@ async function renderBoard() {
     )
   }
   // Set number of rows and create rows beneath top row
-  $table.append(`<tbody class="clues"></tbody>`)
+  $table.append(`<tbody id="clues"></tbody>`)
   for (let r = 1; r <= NUM_CLUES_PER_CATEGORY; r++) {
     $("tbody").append(`<tr class="${r - 1}"></tr>`)
   // Set number of columns and create table cells for clues
@@ -107,8 +101,9 @@ async function renderQuestion(e, clues) {
   // RENDER QUESTION
  let $selected = e.target;
 //  console.log($selected)
-   let row = $($selected).parent()[0].className;
- if($($selected).not("question")) {
+ let row = $($selected).parent()[0].className;
+ if($($selected).not(".question")) {
+   console.log(row);
     $($selected).text(clues[row].question);
     $($selected).addClass("question");  
     return clues;
@@ -118,35 +113,38 @@ async function renderAnswer(e, clues) {
   // RENDER ANSWER
    let $selected = e.target;
    let row = $($selected).parent()[0].className;
-   console.log(row)
+ 
   if ($($selected).hasClass("question")){
     $($selected).text(clues[row].answer)
+    $($selected).removeClass("question");
     $($selected).addClass("answer");  
   } 
 }
 
-
-
-   
-
 $(async function () {
   renderBoard(await getCategoryIds())
+  handleClick();
+})
+
+function handleClick(e) {
   // Event handlers
   $("td").on("click", function (e) {
     let $selectedCategoryId = getSelectedCategoryId(e)
-    console.log(this)
-    if ($(this).answer) {
+    let $selected = e.target;
+    console.log($selected);
+    if ($($selected).answer) {
       return
     }
-    if (!$(this).question) {
+    if (!$($selected).question) {
       console.log("not working")
-      renderAnswer(getClues(e, $selectedCategoryId))
-      this.addClass('question')
+      renderQuestion(getClues(e, $selectedCategoryId))
+      $($selected).addClass("question")
       return
     }
-    if ($(this).question) {
+    if ($($selected).question) {
       console.log("working")
-      renderQuestion(getClues(e, $selectedCategoryId))
+      renderAnswer(getClues(e, $selectedCategoryId))
+      $($selected).addClass("answer")
       return
     }
   })
@@ -164,7 +162,7 @@ $(async function () {
   $("#restart").on("click", function () {
     location.reload()
   })
-})
+}
 
   // V3
   // [X] Should return object with data about a category:
