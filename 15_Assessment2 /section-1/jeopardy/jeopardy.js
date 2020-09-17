@@ -27,22 +27,21 @@ async function getCategoryIds() {
   // Get random categories
   let categories = await axios.get(`${BASE_API_URL}categories?count=100`) //get max provided categories: 100
   let randomCategories = _.sampleSize(categories.data, NUM_CATEGORIES) // randomize categories and reduce sample size
-  // console.log(randomCategories)
-  boardCategories = randomCategories.map(category => ({
-      catId: category.id,
-      catTitle: category.title
-    }));
+  boardCategories = randomCategories.map((category) => ({
+    catId: category.id,
+    catTitle: category.title,
+  }))
   // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
-  // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}}
+  //console.log(randomCategories) // 6: [{...}, {...}, {...}, {...}, {...}, {...}]
+  // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
   // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
 }
 
 function getSelectedCategoryId(e) {
-  let cell = e.target //class is the same (index) for each td in the column <td class="1">?</td>
-  let $clueIndex = $(cell).attr("class") // 1
+  let cell = e.target // board category is the same for each column : td index used to target each category <td class="1">?</td>
+  let $clueIndex = $(cell).attr("class")[0] // 1 , use zero index to remove added question and answer classes (class = "1 question")
   let $selectedCategoryId = boardCategories[$clueIndex].catId // catId for column
-  // console.log($selectedCategoryId)
-  return $selectedCategoryId
+  return $selectedCategoryId;
 }
 
 async function getClues(e, $selectedCategoryId) {
@@ -56,8 +55,7 @@ async function getClues(e, $selectedCategoryId) {
     id: clue.id,
     showing: null
   }))
-  
- console.log(clues)
+ //console.log(clues)
   for(let i = 0; i < clues.length; i++){
     if(!clues[i].question){
       getClues(e, clues); 
@@ -84,7 +82,7 @@ async function renderBoard() {
     )
   }
   // Set number of rows and create rows beneath top row
-  $table.append(`<tbody id="clues"></tbody>`)
+  $table.append(`<tbody class="clues"></tbody>`)
   for (let r = 1; r <= NUM_CLUES_PER_CATEGORY; r++) {
     $("tbody").append(`<tr class="${r - 1}"></tr>`)
   // Set number of columns and create table cells for clues
@@ -100,26 +98,21 @@ async function renderBoard() {
 async function renderQuestion(e, clues) {
   // RENDER QUESTION
  let $selected = e.target;
-//  console.log($selected)
- let row = $($selected).parent()[0].className;
+ let row = $($selected).parent()[0].className[0];
  if($($selected).not(".question")) {
-   console.log(row);
     $($selected).text(clues[row].question);
     $($selected).addClass("question");  
     return clues;
   }
 }
-async function renderAnswer(e, clues) {
+async function renderAnswer($selected) {
   // RENDER ANSWER
-   let $selected = e.target;
-   let row = $($selected).parent()[0].className;
- 
-  if ($($selected).hasClass("question")){
-    $($selected).text(clues[row].answer)
-    $($selected).removeClass("question");
-    $($selected).addClass("answer");  
-  } 
-}
+  let row = $($selected).parent()[0].className[0];
+   let answer = clues[row].answer
+   $($selected).text(answer);
+   $($selected).removeClass("question");
+   $($selected).addClass("answer");  
+} 
 
 $(async function () {
   renderBoard(await getCategoryIds())
@@ -131,20 +124,15 @@ function handleClick(e) {
   $("td").on("click", function (e) {
     let $selectedCategoryId = getSelectedCategoryId(e)
     let $selected = e.target;
-    console.log($selected);
-    if ($($selected).answer) {
+    if ($($selected).hasClass("answer")) {
       return
     }
-    if (!$($selected).question) {
-      console.log("not working")
+    if (!$($selected).hasClass("question")) {
       renderQuestion(getClues(e, $selectedCategoryId))
-      $($selected).addClass("question")
       return
     }
-    if ($($selected).question) {
-      console.log("working")
-      renderAnswer(getClues(e, $selectedCategoryId))
-      $($selected).addClass("answer")
+    if ($($selected).hasClass("question")) {
+      renderAnswer($selected)
       return
     }
   })
