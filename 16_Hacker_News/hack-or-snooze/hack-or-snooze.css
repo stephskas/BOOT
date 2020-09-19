@@ -1,0 +1,19 @@
+body{
+  background-color: yellow;
+  z-index: 1;
+}
+.navbar-nav .nav-link {
+  text-align: right;
+}
+a {
+  color: #fff;
+}
+a:hover {
+  color:#777;
+}
+.subtext {
+  color:#777;
+}
+form {
+  width: 30vw;
+}
