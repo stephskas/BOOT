@@ -5,9 +5,9 @@
 // [X] Should add Play Again button
 // [X] Should create HTML table
 
-  // V2
-  // [X] Should get categories from API
-  // [X] Should return array of NUM_CATEGORIES random category Ids using lodash
+// V2
+// [X] Should get categories from API
+// [X] Should return array of NUM_CATEGORIES random category Ids using lodash
 
 "use strict"
 const BASE_API_URL = "https://jservice.io/api/";
@@ -33,7 +33,7 @@ async function getCategoryIds() {
     catTitle: category.title,
   }))
   // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
-  //console.log(randomCategories) // 6: [{...}, {...}, {...}, {...}, {...}, {...}]
+  console.log(randomCategories) // 6: [{...}, {...}, {...}, {...}, {...}, {...}]
   // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
   // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
 }
@@ -42,7 +42,7 @@ function getSelectedCategoryId(e) {
   let cell = e.target // board category is the same for each column : td index used to target each category <td class="1">?</td>
   let $clueIndex = $(cell).attr("class")[0] // 1 , use zero index to remove added question and answer classes (class = "1 question")
   let $selectedCategoryId = boardCategories[$clueIndex].catId // catId for column
-  return $selectedCategoryId;
+  getClues(e, $selectedCategoryId);
 }
 
 async function getClues(e, $selectedCategoryId) {
@@ -56,14 +56,15 @@ async function getClues(e, $selectedCategoryId) {
   // ) // randomize clues and reduce sample size
   clues = cluesForSelectedCategory.map((clue) => ({
     question: clue.question,
-    answer: clue.answer,
+    answer: clue.answer, 
     showing: null,
   }))
-  //console.log(clues)
-  // Jeopardy API may return clues with empty values for the question property, check all clues for empty question values and repeat request if there are empty values
+  // console.log(clues);
+  // Jeopardy API may return clues with empty values for the question property, check all clues for empty question values and provide FREE POINT
   for (let i = 0; i < clues.length; i++) {
-    if (!clues[i].question) {
-      getClues(e, $selectedCategoryId);
+    if (clues[i].question === "") { 
+      clues[i].question = "FREE POINT"
+      clues[i].answer = "FREE POINT"
     }
   } // if all clues have values for the question property store the clue and render question
   storeClues(e, clues);
@@ -130,6 +131,7 @@ async function renderAnswer(e) {
   $($selected).removeClass("question")
   $($selected).addClass("answer")
 } 
+
 $(async function () {
   renderBoard(await getCategoryIds())
   handleClick();
