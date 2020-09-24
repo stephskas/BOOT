@@ -34,9 +34,10 @@ async function getCategoryIds() {
   }))
   for (let category of boardCategories) {
     if (category.catId === 39) {
-      getCategoryIds()
+      location.reload()
     } 
   }
+  console.log(boardCategories)
   return boardCategories;
   // data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
   // boardCategories // 0: {catId: 11620, catTitle: "lighten up"}
