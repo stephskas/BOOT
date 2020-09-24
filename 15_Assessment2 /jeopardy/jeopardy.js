@@ -34,6 +34,13 @@ async function getCategoryIds() {
   }))
   // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
   console.log(randomCategories) // 6: [{...}, {...}, {...}, {...}, {...}, {...}]
+  for (let category of randomCategories) {
+    if (category.id === 39) {
+      getCategoryIds()
+    } else {
+     return boardCategories;
+    }
+  }
   // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
   // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
 }
