@@ -32,17 +32,14 @@ async function getCategoryIds() {
     catId: category.id,
     catTitle: category.title,
   }))
-  // console.log(categories) // {data: Array(100), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
-  console.log(randomCategories) // 6: [{...}, {...}, {...}, {...}, {...}, {...}]
-  for (let category of randomCategories) {
-    if (category.id === 39) {
+  for (let category of boardCategories) {
+    if (category.catId === 39) {
       getCategoryIds()
-    } else {
-     return boardCategories;
-    }
+    } 
   }
-  // {data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
-  // console.log(boardCategories) // 0: {catId: 11620, catTitle: "lighten up"}
+  return boardCategories;
+  // data: 0: {id: 11531, title: "mixed bag", clues_count: 5}} 
+  // boardCategories // 0: {catId: 11620, catTitle: "lighten up"}
 }
 
 function getSelectedCategoryId(e) {
