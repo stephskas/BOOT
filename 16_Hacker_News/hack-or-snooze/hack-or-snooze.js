@@ -375,13 +375,13 @@ jQuery(function($){
     }
   });
 
-  $("#navMyArticles").on("click"), function(e) {
-    console.log('"#navMyArticles', e)
+  $("#navMyArticles").on("click", function(e) {
+    console.log("#navMyArticles clicked", e)
     if(currentUser){
       generateMyStories();
       $("#my-articles").toggleClass("hidden")
     }
-  }
+  });
   
   async function checkIfLoggedIn() {
     console.debug("checkIfLoggedIn")
@@ -461,6 +461,7 @@ jQuery(function($){
     console.debug("generateFaves")
     // empty out list by default
     $("#favorited-articles").empty();
+    $("#favorited-articles").toggleClass("hidden");
     // if the user has no favorites
     if (currentUser.favorites.length === 0) {
       $("#favorited-articles").append("<h5>No favorites added</h5>");
